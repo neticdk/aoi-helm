@@ -1,0 +1,281 @@
+global:
+  clusterDomain: "cluster.local"
+  tsdb:
+    high_availability:
+      enabled: false
+  priorityClassName: null
+  serviceLabels: {}
+  serviceAnnotations: {}
+  image:
+    pullPolicy: Always
+  revisionHistoryLimit: 5
+  annotations: {}
+  podAnnotations: {}
+  podLabels: {}
+  imagePullSecrets: []
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - all
+
+dashboards:
+  bootstrapConfig:
+    git:
+      github:
+        secretRef: tcs-github-auth
+        template:
+          adminTeam: oaas-team
+          owner: neticdk-k8s
+          repo: tenant-grafana-template
+    vault: {}
+    externalSecretsStore: {}
+  projectBootstrap:
+    git: {}
+
+authProxy:
+  enabled: true
+  replicas: 1
+  image:
+    registry: registry.netic.dk
+    repository: netic-oaas/cortex-proxy
+    tag: v1.0.4
+  priorityClassName: null
+  annotations: {}
+  podAnnotations: {}
+  podLabels: {}
+  selectorLabels: {}
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    runAsNonRoot: true
+  service:
+    annotations: {}
+    labels: {}
+  extraArgs: []
+  extraEnv: []
+  extraEnvFrom: []
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  terminationGracePeriodSeconds: 30
+  affinity: []
+  nodeSelector: {}
+  topologySpauthProxyConstraints: []
+  tolerations: []
+  podManagementPolicy: "Parallel"
+
+
+prometheus:
+  image:
+    registry: docker.io
+    repository: victoriametrics/vmagent
+    tag: v1.91.2
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  priorityClassName: null
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    runAsNonRoot: true
+  relabelConfig: |
+    - source_labels: [cluster_id, namespace]
+      separator: _
+      regex: (.*)
+      target_label: namespace_id
+      replacement: $1
+      action: replace
+  persistence:
+    size: 60Gi
+  configReloader:
+    resources:
+      limits:
+        memory: 25Mi
+      requests:
+        cpu: 10m
+        memory: 25Mi
+
+promxy:
+  replicas: 1
+  image:
+    registry: quay.io
+    repository: jacksontj/promxy
+    tag: v0.0.84
+  priorityClassName: null
+  annotations: {}
+  podAnnotations: {}
+  podLabels: {}
+  selectorLabels: {}
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    runAsNonRoot: true
+  service:
+    annotations: {}
+    labels: {}
+  extraArgs: []
+  extraEnv: []
+  extraEnvFrom: []
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  terminationGracePeriodSeconds: 30
+  affinity: []
+  nodeSelector: {}
+  topologySpauthProxyConstraints: []
+  tolerations: []
+  podManagementPolicy: "Parallel"
+  config: |
+    ##
+    ### Promxy configuration
+    ##
+    promxy:
+      server_groups:
+        - static_configs:
+            - targets:
+              - victoria-metrics-single-1-server.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:8428
+          labels:
+            replica: 1
+          http_client:
+            dial_timeout: 1s
+          ignore_error: true
+          remote_read: true
+          remote_read_path: /api/v1
+        - static_configs:
+            - targets:
+              - victoria-metrics-single-2-server.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:8428
+          labels:
+            replica: 2
+          http_client:
+            dial_timeout: 1s
+          ignore_error: true
+          remote_read: true
+          remote_read_path: /api/v1
+
+
+externalSecret:
+  vaultServer: null
+  vaultPath: null
+  vaultMountPath: null
+  vaultDataFromKey: null
+
+grafana:
+  enabled: true
+  image:
+    pullPolicy: Always
+  testFramework:
+    enabled: false
+  priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  podPortName: http
+  sidecar:
+    image:
+      pullPolicy: Always
+    dashboards:
+      enabled: true
+      label: aoi_dashboard
+      searchNamespace:
+        - application-operations-dashboards
+      folderAnnotation: grafana_dashboard_folder
+      provider:
+        disableDelete: true
+        foldersFromFilesStructure: true
+    datasources:
+      enabled: true
+      label: aoi_grafana_datasource
+
+victoria-metrics-single-1:
+  rbac:
+    create: false
+  server:
+    image:
+      pullPolicy: Always
+      retentionPeriod: 90d
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - victoria-metrics-single-2
+            topologyKey: topology.kubernetes.io/zone
+    persistentVolume:
+      size: 100Gi
+    resources:
+      limits:
+        memory: 1024Mi
+      requests:
+        cpu: 200m
+        memory: 1024Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      fsGroup: 2000
+    serviceMonitor:
+      enabled: true
+      extraLabels:
+        netic.dk/monitoring: "true"
+
+victoria-metrics-single-2:
+  rbac:
+    create: false
+  server:
+    image:
+      pullPolicy: Always
+      retentionPeriod: 90d
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - victoria-metrics-single-1
+            topologyKey: topology.kubernetes.io/zone
+    persistentVolume:
+      size: 100Gi
+    resources:
+      limits:
+        memory: 1024Mi
+      requests:
+        cpu: 200m
+        memory: 1024Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      fsGroup: 2000
+    serviceMonitor:
+      enabled: true
+      extraLabels:
+        netic.dk/monitoring: "true"
