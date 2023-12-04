@@ -1,8 +1,8 @@
-# application-operations-infrastructure
+# aoi
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-A Helm chart for Kubernetes
+A Helm chart for Netic application operations infrastructure
 
 ## Requirements
 
@@ -45,14 +45,16 @@ A Helm chart for Kubernetes
 | authProxy.tolerations | list | `[]` |  |
 | authProxy.topologySpauthProxyConstraints | list | `[]` |  |
 | dashboards.bootstrapConfig.externalSecretsStore | object | `{}` |  |
-| dashboards.bootstrapConfig.git | object | `{}` |  |
+| dashboards.bootstrapConfig.git.github.secretRef | string | `"tcs-github-auth"` |  |
+| dashboards.bootstrapConfig.git.github.template.adminTeam | string | `"oaas-team"` |  |
+| dashboards.bootstrapConfig.git.github.template.owner | string | `"neticdk-k8s"` |  |
+| dashboards.bootstrapConfig.git.github.template.repo | string | `"tenant-grafana-template"` |  |
 | dashboards.bootstrapConfig.vault | object | `{}` |  |
 | dashboards.projectBootstrap.git | object | `{}` |  |
 | externalSecret.vaultDataFromKey | string | `nil` |  |
 | externalSecret.vaultMountPath | string | `nil` |  |
 | externalSecret.vaultPath | string | `nil` |  |
 | externalSecret.vaultServer | string | `nil` |  |
-| fullnameOverride | string | `"aoi"` |  |
 | global.annotations | object | `{}` |  |
 | global.clusterDomain | string | `"cluster.local"` |  |
 | global.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
@@ -61,7 +63,7 @@ A Helm chart for Kubernetes
 | global.imagePullSecrets | list | `[]` |  |
 | global.podAnnotations | object | `{}` |  |
 | global.podLabels | object | `{}` |  |
-| global.priorityClassName | string | `"secure-cloud-stack-tenant-namespace-application-critical"` |  |
+| global.priorityClassName | string | `nil` |  |
 | global.revisionHistoryLimit | int | `5` |  |
 | global.serviceAnnotations | object | `{}` |  |
 | global.serviceLabels | object | `{}` |  |
@@ -83,7 +85,6 @@ A Helm chart for Kubernetes
 | grafana.sidecar.datasources.label | string | `"aoi_grafana_datasource"` |  |
 | grafana.sidecar.image.pullPolicy | string | `"Always"` |  |
 | grafana.testFramework.enabled | bool | `false` |  |
-| nameOverride | string | `"aoi"` |  |
 | prometheus.configReloader.resources.limits.memory | string | `"25Mi"` |  |
 | prometheus.configReloader.resources.requests.cpu | string | `"10m"` |  |
 | prometheus.configReloader.resources.requests.memory | string | `"25Mi"` |  |
@@ -131,7 +132,7 @@ A Helm chart for Kubernetes
 | victoria-metrics-single-1.rbac.create | bool | `false` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"app.kubernetes.io/name"` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
-| victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single"` |  |
+| victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single-2"` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"topology.kubernetes.io/zone"` |  |
 | victoria-metrics-single-1.server.image.pullPolicy | string | `"Always"` |  |
 | victoria-metrics-single-1.server.image.retentionPeriod | string | `"90d"` |  |
@@ -149,7 +150,7 @@ A Helm chart for Kubernetes
 | victoria-metrics-single-2.rbac.create | bool | `false` |  |
 | victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"app.kubernetes.io/name"` |  |
 | victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
-| victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single"` |  |
+| victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single-1"` |  |
 | victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"topology.kubernetes.io/zone"` |  |
 | victoria-metrics-single-2.server.image.pullPolicy | string | `"Always"` |  |
 | victoria-metrics-single-2.server.image.retentionPeriod | string | `"90d"` |  |
