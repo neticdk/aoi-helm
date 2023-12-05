@@ -201,6 +201,10 @@ grafana:
     datasources:
       enabled: true
       label: aoi_grafana_datasource
+  ingress:
+    enabled: false
+    fqdn: null
+
 
 victoria-metrics-single-1:
   rbac:
