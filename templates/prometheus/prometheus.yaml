@@ -67,4 +67,4 @@ spec:
   securityContext:
     {{- toYaml .Values.prometheus.podSecurityContext | nindent 4 }}
   serviceAccountName: prometheus
-  version: v${prometheus_version:=2.39.0}
+  version: v2.39.0
