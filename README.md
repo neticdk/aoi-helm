@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -70,6 +70,8 @@ A Helm chart for Netic application operations infrastructure
 | global.tsdb.high_availability.enabled | bool | `false` |  |
 | grafana.enabled | bool | `true` |  |
 | grafana.image.pullPolicy | string | `"Always"` |  |
+| grafana.ingress.enabled | bool | `false` |  |
+| grafana.ingress.fqdn | string | `nil` |  |
 | grafana.podPortName | string | `"http"` |  |
 | grafana.priorityClassName | string | `"secure-cloud-stack-tenant-namespace-application-critical"` |  |
 | grafana.resources.limits.memory | string | `"256Mi"` |  |
