@@ -1,0 +1,60 @@
+name: cd
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_helm_chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      #
+      # Generated files
+      #
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.2'
+
+      - name: Install extra tooling
+        run: |
+          go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+          go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+          go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0
+
+      - name: Render documentation
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          helm-docs
+          git update-index -q --ignore-submodules --refresh
+          if ! git diff-files --quiet --ignore-submodules -- ; then
+            echo Generating documentation caused a change - did you forget to run 'helm-docs' before commit?
+            exit 1
+          fi
+
+      #
+      # Deploy
+      #
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.7.2
+
+      - name: Add dependency chart repos
+        run: ./.github/scripts/helm-repos.sh
+        shell: bash
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.2.1
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
