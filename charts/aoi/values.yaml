@@ -103,6 +103,8 @@ prometheus:
       requests:
         cpu: 10m
         memory: 25Mi
+  extraVolumes: []
+  extraVolumeMounts: []
 
 promxy:
   replicas: 1
