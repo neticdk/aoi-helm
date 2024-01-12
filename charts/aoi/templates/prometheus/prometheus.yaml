@@ -1,0 +1,70 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: {{ include "aoi.prometheusFullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  configMaps:
+    - remote-write-relabel
+  containers:
+    - name: prometheus
+      args:
+        - -httpListenAddr=:9090
+        - -promscrape.config=/etc/prometheus/config_out/prometheus.env.yaml
+        - -promscrape.config.strictParse=false
+        - -remoteWrite.url={{- include "aoi.prometheusWriteUrl" . }}
+        - -remoteWrite.urlRelabelConfig=/etc/prometheus/configmaps/remote-write-relabel/relabel_config.yaml
+        - -remoteWrite.tmpDataPath=/prometheus
+        - -remoteWrite.maxDiskUsagePerURL={{- include "aoi.prometheusMaxDiskUsagePerURL" . }}
+      image: "{{ .Values.prometheus.image.registry }}/{{ .Values.prometheus.image.repository }}:{{ .Values.prometheus.image.tag }}"
+    - name: config-reloader
+      resources:
+        {{- toYaml .Values.prometheus.configReloader.resources | nindent 8 }}
+  evaluationInterval: 30s
+  externalLabels:
+    cluster_id: "${cluster_provider}_${cluster_name}"
+    cluster: ${cluster_name}
+    cluster_type: "${cluster_type}"
+    prometheus_cluster: ${cluster_name}/aoi-prometheus
+    provider: "${cluster_provider}"
+  podMetadata:
+    labels:
+      {{- include "aoi.prometheusSelectorLabels" . | nindent 6 }}
+      {{- with .Values.global.podLabels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.prometheus.podLabels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.prometheus.selectorLabels }}
+      {{- tpl (toYaml .) $ | nindent 6 }}
+      {{- end }}
+  podMonitorNamespaceSelector:
+    matchLabels: {}
+  podMonitorSelector:
+    matchLabels: {}
+  ruleNamespaceSelector:
+    matchLabels: {}
+  ruleSelector:
+    matchLabels: {}
+  serviceMonitorNamespaceSelector:
+    matchLabels: {}
+  serviceMonitorSelector:
+    matchLabels: {}
+  portName: web
+  {{- include "aoi.prometheusPriorityClassName" . | nindent 2 }}
+  replicas: 1
+  resources:
+    {{- toYaml .Values.prometheus.resources | nindent 4 }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        resources:
+          requests:
+            storage: {{ .Values.prometheus.persistence.size }}
+  scrapeInterval: 30s
+  securityContext:
+    {{- toYaml .Values.prometheus.podSecurityContext | nindent 4 }}
+  serviceAccountName: prometheus
+  version: v2.39.0
