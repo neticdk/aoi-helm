@@ -3,7 +3,7 @@ name: cd
 on:
   push:
     branches:
-      - debug-actions
+      - main
 
 jobs:
   publish_helm_chart:
