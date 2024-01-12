@@ -25,6 +25,29 @@ entries:
     - https://github.com/neticdk/aoi-helm/releases/download/aoi-0.1.4/aoi-0.1.4.tgz
     version: 0.1.4
   - apiVersion: v2
+    created: "2024-01-12T10:10:11.328982718Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 7.0.9
+    - alias: victoria-metrics-single-1
+      name: victoria-metrics-single
+      repository: https://victoriametrics.github.io/helm-charts/
+      version: 0.9.12
+    - alias: victoria-metrics-single-2
+      condition: global.tsdb.high_availability.enabled
+      name: victoria-metrics-single
+      repository: https://victoriametrics.github.io/helm-charts/
+      version: 0.9.12
+    description: A Helm chart for Netic application operations infrastructure
+    digest: d53224676cd7ee62fb1455ca036b9ab44e6d8532af009e0153fd45f58bc85b02
+    name: aoi
+    type: application
+    urls:
+    - https://github.com/neticdk/aoi-helm/releases/download/aoi-0.1.2/aoi-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2024-01-10T12:11:54.13059427Z"
     dependencies:
     - condition: grafana.enabled
@@ -47,4 +70,4 @@ entries:
     urls:
     - https://github.com/neticdk/aoi-helm/releases/download/aoi-0.1.1/aoi-0.1.1.tgz
     version: 0.1.1
-generated: "2024-01-10T12:11:54.130605231Z"
+generated: "2024-01-12T10:10:11.328995612Z"
