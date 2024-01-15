@@ -68,9 +68,9 @@ spec:
     {{- toYaml .Values.prometheus.podSecurityContext | nindent 4 }}
   serviceAccountName: prometheus
   version: v2.39.0
-  {{- if .Values.ruler.extraVolumes }}
-  {{ toYaml .Values.ruler.extraVolumes | nindent 2}}
+  {{- if .Values.prometheus.extraVolumes }}
+  {{ toYaml .Values.prometheus.extraVolumes | nindent 2}}
   {{- end }}
-  {{- if .Values.ruler.extraVolumeMounts }}
-  {{ toYaml .Values.ruler.extraVolumeMounts | nindent 2}}
+  {{- if .Values.prometheus.extraVolumeMounts }}
+  {{ toYaml .Values.prometheus.extraVolumeMounts | nindent 2}}
   {{- end }}
