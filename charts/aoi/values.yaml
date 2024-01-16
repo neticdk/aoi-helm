@@ -82,6 +82,7 @@ prometheus:
       cpu: 100m
       memory: 256Mi
   priorityClassName: null
+  podAnnotations: {}
   podSecurityContext:
     runAsUser: 1000
     runAsGroup: 3000
