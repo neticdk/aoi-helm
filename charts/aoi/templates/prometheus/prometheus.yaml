@@ -29,6 +29,8 @@ spec:
     prometheus_cluster: ${cluster_name}/aoi-prometheus
     provider: "${cluster_provider}"
   podMetadata:
+    annotations:
+      {{- toYaml .Values.prometheus.podAnnotations | nindent 6 }}
     labels:
       {{- include "aoi.prometheusSelectorLabels" . | nindent 6 }}
       {{- with .Values.global.podLabels }}
