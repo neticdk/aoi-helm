@@ -17,3 +17,7 @@ dependencies:
     version: 0.9.12
     repository: https://victoriametrics.github.io/helm-charts/
     condition: global.tsdb.high_availability.enabled
+  - name: victoria-metrics-alert
+    version: 0.8.3
+    repository: https://victoriametrics.github.io/helm-charts/
+    condition: global.alerting

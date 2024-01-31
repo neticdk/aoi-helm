@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -9,6 +9,7 @@ A Helm chart for Netic application operations infrastructure
 | Repository | Name | Version |
 |------------|------|---------|
 | https://grafana.github.io/helm-charts | grafana | 7.0.9 |
+| https://victoriametrics.github.io/helm-charts/ | victoria-metrics-alert | 0.8.3 |
 | https://victoriametrics.github.io/helm-charts/ | victoria-metrics-single-1(victoria-metrics-single) | 0.9.12 |
 | https://victoriametrics.github.io/helm-charts/ | victoria-metrics-single-2(victoria-metrics-single) | 0.9.12 |
 
@@ -90,10 +91,13 @@ A Helm chart for Netic application operations infrastructure
 | prometheus.configReloader.resources.limits.memory | string | `"25Mi"` |  |
 | prometheus.configReloader.resources.requests.cpu | string | `"10m"` |  |
 | prometheus.configReloader.resources.requests.memory | string | `"25Mi"` |  |
+| prometheus.extraVolumeMounts | list | `[]` |  |
+| prometheus.extraVolumes | list | `[]` |  |
 | prometheus.image.registry | string | `"docker.io"` |  |
 | prometheus.image.repository | string | `"victoriametrics/vmagent"` |  |
 | prometheus.image.tag | string | `"v1.91.2"` |  |
 | prometheus.persistence.size | string | `"60Gi"` |  |
+| prometheus.podAnnotations | object | `{}` |  |
 | prometheus.podSecurityContext.fsGroup | int | `2000` |  |
 | prometheus.podSecurityContext.runAsGroup | int | `3000` |  |
 | prometheus.podSecurityContext.runAsNonRoot | bool | `true` |  |
@@ -131,6 +135,69 @@ A Helm chart for Netic application operations infrastructure
 | promxy.terminationGracePeriodSeconds | int | `30` |  |
 | promxy.tolerations | list | `[]` |  |
 | promxy.topologySpauthProxyConstraints | list | `[]` |  |
+| victoria-metrics-alert.server.alertmanager.configMap | string | `"alertmanager-config"` |  |
+| victoria-metrics-alert.server.alertmanager.enabled | bool | `false` |  |
+| victoria-metrics-alert.server.alertmanager.image | string | `"docker.io/prom/alertmanager"` |  |
+| victoria-metrics-alert.server.alertmanager.podSecurityContext.fsGroup | int | `2000` |  |
+| victoria-metrics-alert.server.alertmanager.podSecurityContext.runAsGroup | int | `3000` |  |
+| victoria-metrics-alert.server.alertmanager.podSecurityContext.runAsUser | int | `1000` |  |
+| victoria-metrics-alert.server.alertmanager.priorityClassName | string | `"secure-cloud-stack-tenant-namespace-application-critical"` |  |
+| victoria-metrics-alert.server.alertmanager.resources.limits.memory | string | `"64Mi"` |  |
+| victoria-metrics-alert.server.alertmanager.resources.requests.cpu | string | `"10m"` |  |
+| victoria-metrics-alert.server.alertmanager.resources.requests.memory | string | `"64Mi"` |  |
+| victoria-metrics-alert.server.alertmanager.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| victoria-metrics-alert.server.alertmanager.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| victoria-metrics-alert.server.alertmanager.tag | string | `"v0.25.0"` |  |
+| victoria-metrics-alert.server.datasource.url | string | `"${vmalert_metrics_endpoint}${vmalert_extra_label:=?extra_label=namespace_id=${cluster_provider}_${cluster_name}_$(NAMESPACE)}"` |  |
+| victoria-metrics-alert.server.env[0].name | string | `"NAMESPACE"` |  |
+| victoria-metrics-alert.server.env[0].valueFrom.fieldRef.fieldPath | string | `"metadata.namespace"` |  |
+| victoria-metrics-alert.server.extraArgs.rule | string | `"/tmp/rules/*.yaml"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[0].name | string | `"IGNORE_ALREADY_PROCESSED"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[0].value | string | `"true"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[1].name | string | `"METHOD"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[1].value | string | `"WATCH"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[2].name | string | `"LABEL"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[2].value | string | `"application-operation-alerts"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[3].name | string | `"FOLDER"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[3].value | string | `"/tmp/rules"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[4].name | string | `"RESOURCE"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[4].value | string | `"configmap"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[5].name | string | `"NAMESPACE"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[5].valueFrom.fieldRef.fieldPath | string | `"metadata.namespace"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[6].name | string | `"REQ_URL"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[6].value | string | `"http://localhost:8880/-/reload"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[7].name | string | `"REQ_METHOD"` |  |
+| victoria-metrics-alert.server.extraContainers[0].env[7].value | string | `"GET"` |  |
+| victoria-metrics-alert.server.extraContainers[0].image | string | `"docker.io/kiwigrid/k8s-sidecar:1.25.2"` |  |
+| victoria-metrics-alert.server.extraContainers[0].imagePullPolicy | string | `"Always"` |  |
+| victoria-metrics-alert.server.extraContainers[0].name | string | `"config-reloader"` |  |
+| victoria-metrics-alert.server.extraContainers[0].resources.limits.memory | string | `"96Mi"` |  |
+| victoria-metrics-alert.server.extraContainers[0].resources.requests.cpu | string | `"10m"` |  |
+| victoria-metrics-alert.server.extraContainers[0].resources.requests.memory | string | `"96Mi"` |  |
+| victoria-metrics-alert.server.extraContainers[0].securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| victoria-metrics-alert.server.extraContainers[0].securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| victoria-metrics-alert.server.extraContainers[0].securityContext.runAsNonRoot | bool | `true` |  |
+| victoria-metrics-alert.server.extraContainers[0].volumeMounts[0].mountPath | string | `"/tmp/rules"` |  |
+| victoria-metrics-alert.server.extraContainers[0].volumeMounts[0].name | string | `"alert-rules"` |  |
+| victoria-metrics-alert.server.extraVolumeMounts[0].mountPath | string | `"/tmp/rules"` |  |
+| victoria-metrics-alert.server.extraVolumeMounts[0].name | string | `"alert-rules"` |  |
+| victoria-metrics-alert.server.extraVolumes[0].emptyDir | object | `{}` |  |
+| victoria-metrics-alert.server.extraVolumes[0].name | string | `"alert-rules"` |  |
+| victoria-metrics-alert.server.image.pullPolicy | string | `"Always"` |  |
+| victoria-metrics-alert.server.image.registry | string | `"docker.io"` |  |
+| victoria-metrics-alert.server.image.repository | string | `"victoriametrics/vmagent"` |  |
+| victoria-metrics-alert.server.image.tag | string | `"v1.97.0"` |  |
+| victoria-metrics-alert.server.podSecurityContext.fsGroup | int | `2000` |  |
+| victoria-metrics-alert.server.podSecurityContext.runAsGroup | int | `3000` |  |
+| victoria-metrics-alert.server.podSecurityContext.runAsUser | int | `1000` |  |
+| victoria-metrics-alert.server.priorityClassName | string | `"secure-cloud-stack-tenant-namespace-application-critical"` |  |
+| victoria-metrics-alert.server.resources.limits.memory | string | `"64Mi"` |  |
+| victoria-metrics-alert.server.resources.requests.cpu | string | `"10m"` |  |
+| victoria-metrics-alert.server.resources.requests.memory | string | `"64Mi"` |  |
+| victoria-metrics-alert.server.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| victoria-metrics-alert.server.securityContext.capabilities.drop[0] | string | `"all"` |  |
+| victoria-metrics-alert.server.serviceMonitor.enabled | bool | `true` |  |
+| victoria-metrics-alert.server.serviceMonitor.extraLabels."netic.dk/monitoring" | string | `"true"` |  |
 | victoria-metrics-single-1.rbac.create | bool | `false` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"app.kubernetes.io/name"` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |

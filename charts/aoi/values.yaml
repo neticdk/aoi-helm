@@ -286,3 +286,128 @@ victoria-metrics-single-2:
       enabled: true
       extraLabels:
         netic.dk/monitoring: "true"
+
+alerting:
+  enabled: false
+  createProjectBootstrap: false
+  bootstrapConfig:
+    git:
+      github:
+        secretRef: tcs-github-auth
+        template:
+          adminTeam: oaas-team
+          owner: neticdk-k8s
+          repo: tenant-grafana-template
+    vault: {}
+    externalSecretsStore: {}
+  projectBootstrap:
+    git: {}
+
+victoria-metrics-alert:
+  serviceAccount:
+    create: false
+    name: "victoria-metrics-alert-config-reloader"
+  rbac:
+    create: false
+  server:
+    priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
+    image:
+      registry: docker.io
+      repository: victoriametrics/vmagent
+      tag: v1.97.0
+      pullPolicy: Always 
+    resources:
+      limits:
+        memory: 64Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
+    env: # TODO ASH what is this used for? 
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+    extraArgs:
+      rule: '/tmp/rules/*.yaml'
+    extraVolumes:
+      - name: alert-rules
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: alert-rules
+        mountPath: /tmp/rules
+    datasource: 
+      url: "prometheus-operated.application-operations-system.svc.cluster.local"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      fsGroup: 2000
+    extraContainers:
+      - name: config-reloader
+        image: docker.io/kiwigrid/k8s-sidecar:1.25.2
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: 96Mi
+          requests:
+            cpu: 10m
+            memory: 96Mi
+        securityContext:
+          capabilities:
+            drop:
+              - ALL
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+        env:
+          - name: IGNORE_ALREADY_PROCESSED
+            value: "true"
+          - name: METHOD
+            value: WATCH
+          - name: LABEL
+            value: application-operation-alerts
+          - name: FOLDER
+            value: /tmp/rules
+          - name: RESOURCE
+            value: configmap
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: REQ_URL
+            value: http://localhost:8880/-/reload
+          - name: REQ_METHOD
+            value: GET
+        volumeMounts:
+          - name: alert-rules
+            mountPath: /tmp/rules
+  alertmanager:
+    enabled: false
+    priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
+    image: docker.io/prom/alertmanager
+    tag: v0.25.0
+    resources:
+      limits:
+        memory: 64Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
+    configMap: "alertmanager-config"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      fsGroup: 2000
+  serviceMonitor:
+    enabled: true
+    extraLabels:
+      netic.dk/monitoring: "true"
+
+
