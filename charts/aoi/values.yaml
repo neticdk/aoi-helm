@@ -290,7 +290,7 @@ victoria-metrics-single-2:
 alerting:
   enabled: true
   # value of label cluster_id
-  clusterId: "netic-platform_prod1"
+  clusterId: ""
   clusterWideNamespace:
     enabled: true
     name: application-operations-alerting
