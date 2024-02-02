@@ -13,7 +13,7 @@ data:
     - name: VictoriaMetrics
       uid: victoriametrics
       type: prometheus
-      url: {{ include "aoi.grafanaReadUrl" . }}
+      url: {{ include "aoi.ReadUrl" . }}
       access: proxy
       isDefault: true
       jsonData:

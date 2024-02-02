@@ -1,14 +1,17 @@
-{{- if .Values.alerting.createNamespace.enabled }}
+{{- if .Values.alerting.enabled }}
+{{- range $i, $namespace := (include "aoi.alerting.namespaces" . | fromJsonArray) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: victoria-metrics-alert-config-reloader
+  namespace: {{ $namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: config-reloader-role
+  namespace: {{ $namespace }}
 rules:
   - apiGroups:
       - ""
@@ -23,6 +26,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: config-reloader-rolebinding
+  namespace: {{ $namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -30,4 +34,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: victoria-metrics-alert-config-reloader
+    namespace: {{ $namespace }}
+{{- end }}
 {{- end }}

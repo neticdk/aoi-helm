@@ -1,0 +1,57 @@
+{{- if and .Values.alerting.enabled .Values.alerting.clusterWideNamespace.enabled }}
+---
+apiVersion: project.tcs.trifork.com/v1alpha1
+kind: BootstrapConfig
+metadata:
+  name: application-operations-alerting
+  namespace: netic-gitops-system
+spec:
+  sizes:
+    application-operations-alerting:
+      limitRange:
+        limits:
+          - type: Container
+            default:
+              memory: 1Mi
+            defaultRequest:
+              cpu: "1m"
+              memory: 1Mi
+      resourceQuota:
+        hard:
+          requests.cpu: "1"
+          requests.memory: "1Gi"
+          requests.storage: "100Gi"
+          limits.memory: "1Gi"
+          persistentvolumeclaims: "1"
+          count/deployments.apps: "2"
+  rules:  # Role rules for deployment user
+    - apiGroups: [""]
+      resources: ["services", "configmaps", "secrets", "persistentvolumeclaims"]
+      verbs: ["*"]
+    - apiGroups: ["apps"]
+      resources: ["deployments", "statefulsets", "replicasets"]
+      verbs: ["*"]
+    - apiGroups: ["monitoring.coreos.com"]
+      resources: ["servicemonitors", "podmonitors"]
+      verbs: ["*"]
+    - apiGroups: ["policy"]
+      resources: ["poddisruptionbudgets"]
+      verbs: ["*"]
+    - apiGroups: ["helm.toolkit.fluxcd.io"]
+      resources: ["helmreleases"]
+      verbs: ["*"]
+    - apiGroups: ["source.toolkit.fluxcd.io"]
+      resources: ["helmrepositories"]
+      verbs: ["*"]
+
+  labels:
+    netic.dk/enforce-policies: "true"
+  git:
+    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.git | nindent 4 }}
+
+  vault:
+    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.vault | nindent 4 }}
+
+  externalSecretsStore:
+    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | nindent 4 }}
+{{- end }}

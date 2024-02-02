@@ -25,7 +25,6 @@ spec:
           limits.memory: "0Gi"
           persistentvolumeclaims: "0"
           count/deployments.apps: "0"
-
   rules:  # Role rules for deployment user
     - apiGroups: [""]
       resources: ["configmaps"]

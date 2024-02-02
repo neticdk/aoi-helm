@@ -20,4 +20,4 @@ dependencies:
   - name: victoria-metrics-alert
     version: 0.8.3
     repository: https://victoriametrics.github.io/helm-charts/
-    condition: global.alerting
+    condition: alerting.enabled
