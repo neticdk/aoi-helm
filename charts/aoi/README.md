@@ -17,7 +17,7 @@ A Helm chart for Netic application operations infrastructure
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| alerting.clusterId | string | `"netic-platform_prod1"` |  |
+| alerting.clusterId | string | `""` |  |
 | alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | object | `{}` |  |
 | alerting.clusterWideNamespace.bootstrapConfig.git.github.secretRef | string | `"tcs-github-auth"` |  |
 | alerting.clusterWideNamespace.bootstrapConfig.git.github.template.adminTeam | string | `"oaas-team"` |  |
