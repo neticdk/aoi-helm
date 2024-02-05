@@ -288,11 +288,11 @@ victoria-metrics-single-2:
         netic.dk/monitoring: "true"
 
 alerting:
-  enabled: true
+  enabled: false
   # value of label cluster_id
   clusterId: ""
   clusterWideNamespace:
-    enabled: true
+    enabled: false
     name: application-operations-alerting
     bootstrapConfig:
       git:
