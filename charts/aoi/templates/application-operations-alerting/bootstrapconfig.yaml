@@ -44,6 +44,18 @@ spec:
       resources: ["helmrepositories"]
       verbs: ["*"]
 
+  networkPolicies:  # Default network policies - deny-all will always be added
+    default-egress:
+      podSelector: {}
+      policyTypes:
+        - Egress
+      egress:
+        - ports:
+            - protocol: TCP
+              port: 53
+            - protocol: UDP
+              port: 53
+
   labels:
     netic.dk/enforce-policies: "true"
   git:

@@ -40,9 +40,9 @@ spec:
           mountPath: /tmp/rules
       datasource:
         {{- if eq $namespace $.Values.alerting.clusterWideNamespace.name }}
-        url: "{{ include "aoi.ReadUrl" $ }}"
+        url: "{{ include "aoi.readUrl" $ }}"
         {{- else }}
-        url: "{{ include "aoi.ReadUrl" $ }}?extra_label=namespace_id={{ $.Values.alerting.clusterId }}_{{ $namespace }}"
+        url: "{{ include "aoi.readUrl" $ }}?extra_label=namespace_id={{ $.Values.alerting.clusterId }}_{{ $namespace }}"
         {{- end }}
       securityContext:
         {{- toYaml $.Values.alerting.helmRelease.values.server.securityContext | nindent 8 }}

@@ -84,12 +84,31 @@ Create the port for the read path to tsdb.
 {{- end }}
 
 {{/*
-metrics read url
+metrics read url 
 */}}
-{{- define "aoi.ReadUrl" -}}
+{{- define "aoi.readUrl" -}}
+{{- printf "http://%s-%s.%s.svc.%s:%s" (include "aoi.name" . ) (include "aoi.readHost" . ) .Release.Namespace .Values.global.clusterDomain (include "aoi.readPort" . ) }} 
+{{- end }}
+
+
+{{/*
+metrics read url for grafana
+*/}}
+{{- define "aoi.grafanaReadUrl" -}}
 {{- if .Values.authProxy.enabled }}
 {{- printf "http://%s-auth-proxy.%s.svc.%s:8080" (include "aoi.name" . )   .Release.Namespace .Values.global.clusterDomain }}
 {{- else }}
 {{- printf "http://%s-%s.%s.svc.%s:%s" (include "aoi.name" . ) (include "aoi.readHost" . ) .Release.Namespace .Values.global.clusterDomain (include "aoi.readPort" . ) }} 
+{{- end }}
+{{- end }}
+
+{{/*
+Create the lable value for victoria-metrics kubernetes/name lable.
+*/}}
+{{- define "aoi.vmLableName" -}}
+{{- if .Values.global.tsdb.high_availability.enabled }}
+{{- printf "promxy" }}
+{{- else }}
+{{- printf "victoria-metrics-single-1" }}
 {{- end }}
 {{- end }}

@@ -76,7 +76,7 @@ spec:
           podSelector:
             matchLabels:
               app: server
-              app.kubernetes.io/name: victoria-metrics-single
+              app.kubernetes.io/name: {{ include "aoi.vmLableName" $ }}
       ports:
         - port: http
           protocol: TCP
