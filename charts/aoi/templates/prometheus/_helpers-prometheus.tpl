@@ -37,9 +37,9 @@ Create remotewrite url for tsdb.
 */}}
 {{- define "aoi.prometheusWriteUrl" -}}
 {{- if .Values.global.tsdb.high_availability.enabled }}
-{{- printf "http://victoria-metrics-single-1-server:8428/api/v1/write,http://victoria-metrics-single-2-server:8428/api/v1/write" }}
+{{- printf "http://%s-victoria-metrics-single-1-server:8428/api/v1/write,http://%s-victoria-metrics-single-2-server:8428/api/v1/write" (include "aoi.name" . ) (include "aoi.name" . ) }}
 {{- else }}
-{{- printf "http://victoria-metrics-single-1-server:8428/api/v1/write" }}
+{{- printf "http://%s-victoria-metrics-single-1-server:8428/api/v1/write" (include "aoi.name" . ) }}
 {{- end }}
 {{- end }}
 

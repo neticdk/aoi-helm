@@ -286,3 +286,99 @@ victoria-metrics-single-2:
       enabled: true
       extraLabels:
         netic.dk/monitoring: "true"
+
+alerting:
+  enabled: false
+  # value of label cluster_id
+  clusterId: ""
+  clusterWideNamespace:
+    enabled: false
+    name: application-operations-alerting
+    bootstrapConfig:
+      git:
+        github:
+          secretRef: tcs-github-auth
+          template:
+            adminTeam: oaas-team
+            owner: neticdk-k8s
+            repo: tenant-alerting-template
+      vault: {}
+      externalSecretsStore: {}
+    projectBootstrap:
+      git: {}
+  namespaces: []
+  helmRepository: null
+  helmRelease:
+    values:
+      server:
+        priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
+        image:
+          registry: docker.io
+          repository: victoriametrics/vmalert
+          pullPolicy: Always
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - all
+        configReloader:
+          image:
+            registry: docker.io
+            repository: kiwigrid/k8s-sidecar
+            tag: "1.25.2"
+            pullPolicy: Always
+          resources:
+            limits:
+              memory: 96Mi
+            requests:
+              cpu: 10m
+              memory: 96Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+        podSecurityContext:
+          runAsUser: 1000
+          runAsGroup: 3000
+          fsGroup: 2000
+      alertmanager:
+        priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
+        image:
+          registry: docker.io
+          repository: prom/alertmanager
+          pullPolicy: Always
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        podSecurityContext:
+          runAsUser: 1000
+          runAsGroup: 3000
+          fsGroup: 2000
+
+# This is here to disable everything from the victoria-metrics-alert helm chart in chart.yaml since it is only used for versioning 
+victoria-metrics-alert:
+  serviceAccount:
+    create: false
+  rbac:
+    create: false
+  server:
+    enabled: false
+    configMap: "null"
