@@ -1,8 +1,11 @@
+# Global definitions used for components directly managed by this chart
 global:
   clusterDomain: "cluster.local"
   tsdb:
     high_availability:
+      # -- Enable high-availability for tsdb (Victoria-metrics-single)
       enabled: false
+  # -- Default priorityClassName to use
   priorityClassName: null
   serviceLabels: {}
   serviceAnnotations: {}
@@ -19,7 +22,9 @@ global:
       drop:
         - all
 
+# Namespace for tenant dashboards
 dashboards:
+  # -- Options to configure the bootstrapConfig used for tenant dashboard namespace
   bootstrapConfig:
     git:
       github:
@@ -30,10 +35,13 @@ dashboards:
           repo: tenant-grafana-template
     vault: {}
     externalSecretsStore: {}
+  # -- Options to configure the projectBootstrap used for tenant dashboard namespace
   projectBootstrap:
     git: {}
 
+# Prometheus Queries are filtered using client JWT token (Grafana)
 authProxy:
+  # -- Enable filtering of Prometheus Queries based on client JWT token (Grafana)
   enabled: true
   replicas: 1
   image:
@@ -88,6 +96,7 @@ prometheus:
     runAsGroup: 3000
     fsGroup: 2000
     runAsNonRoot: true
+  # -- relabel configs to apply to samples before ingestion.
   relabelConfig: |
     - source_labels: [cluster_id, namespace]
       separator: _
@@ -107,6 +116,7 @@ prometheus:
   extraVolumes: []
   extraVolumeMounts: []
 
+# Used in HA mode to route request to one or the other tsdb - https://github.com/jacksontj/promxy?tab=readme-ov-file#why-promxy
 promxy:
   replicas: 1
   image:
@@ -175,7 +185,9 @@ externalSecret:
   vaultMountPath: null
   vaultDataFromKey: null
 
+
 grafana:
+  # -- If true deploy Grafana for tenant dashboards
   enabled: true
   image:
     pullPolicy: Always
@@ -189,14 +201,18 @@ grafana:
       cpu: 100m
       memory: 256Mi
   podPortName: http
+  # sidecar used to provision tenant dashboards found as configmaps in the namespace application-operations-dashboards with label aoi_dashboard
   sidecar:
     image:
       pullPolicy: Always
     dashboards:
       enabled: true
+      # -- Load configmaps with label key
       label: aoi_dashboard
+      # -- Watch for configmaps in namespaces
       searchNamespace:
         - application-operations-dashboards
+      # -- override grafana folder using annotation
       folderAnnotation: grafana_dashboard_folder
       provider:
         disableDelete: true
@@ -213,9 +229,11 @@ victoria-metrics-single-1:
   rbac:
     create: false
   server:
+    # -- Data retention period
+    retentionPeriod: 90d
     image:
       pullPolicy: Always
-      retentionPeriod: 90d
+    # Try to not schedule victoria-metrics-single-1 in same zone as victoria-metrics-single-2
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -227,6 +245,7 @@ victoria-metrics-single-1:
                     - victoria-metrics-single-2
             topologyKey: topology.kubernetes.io/zone
     persistentVolume:
+      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
       size: 100Gi
     resources:
       limits:
@@ -252,9 +271,11 @@ victoria-metrics-single-2:
   rbac:
     create: false
   server:
+    # -- Data retention period
+    retentionPeriod: 90d
     image:
       pullPolicy: Always
-      retentionPeriod: 90d
+    # Try to not schedule victoria-metrics-single-2 in same zone as victoria-metrics-single-1      
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -266,6 +287,7 @@ victoria-metrics-single-2:
                     - victoria-metrics-single-1
             topologyKey: topology.kubernetes.io/zone
     persistentVolume:
+      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
       size: 100Gi
     resources:
       limits:
@@ -288,12 +310,15 @@ victoria-metrics-single-2:
         netic.dk/monitoring: "true"
 
 alerting:
+  # -- Enable deploying alerting components
   enabled: false
-  # value of label cluster_id
+  # -- Value of the label (cluster_id)
   clusterId: ""
   clusterWideNamespace:
+    # -- Create alerting namespace for cluster-wide alert definitions
     enabled: false
     name: application-operations-alerting
+    # -- Options to configure the bootstrapConfig used for cluster-wide alert namespace.
     bootstrapConfig:
       git:
         github:
@@ -304,10 +329,14 @@ alerting:
             repo: tenant-alerting-template
       vault: {}
       externalSecretsStore: {}
+    # -- Options to configure the projectBootstrap used for cluster-wide alert namespace.
     projectBootstrap:
       git: {}
+  # -- List of namespaces which should have alerting components deployed
   namespaces: []
+  # -- Override the default helmRepository used to deploy alerting components
   helmRepository: null
+  # -- Values to configure for the victoria-metrics-alert helm chart. https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-alert/values.yaml
   helmRelease:
     values:
       server:
@@ -374,6 +403,7 @@ alerting:
           fsGroup: 2000
 
 # This is here to disable everything from the victoria-metrics-alert helm chart in chart.yaml since it is only used for versioning 
+# Do not change!
 victoria-metrics-alert:
   serviceAccount:
     create: false
