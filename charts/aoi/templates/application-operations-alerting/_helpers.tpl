@@ -75,8 +75,11 @@ git:
 {{- else if eq .Values.global.bootstrapConfig.git.flavor "gitlab" }}
   gitlab:
   {{- default .Values.global.bootstrapConfig.git.gitlab .Values.alerting.clusterWideNamespace.bootstrapConfig.git.gitlab | toYaml | nindent 4}}
+{{- else if eq .Values.global.bootstrapConfig.git.flavor "bitbucket" }}
+  bitbucket:
+  {{- default .Values.global.bootstrapConfig.git.bitbucket .Values.alerting.clusterWideNamespace.bootstrapConfig.git.bitbucket | toYaml | nindent 4}}
 {{- else }}
-{{ fail "Invalid git flavor. Supported git flavors (github,gitlab)" }}
+{{ fail "Invalid git flavor. Supported git flavors (github,gitlab,bitbucket)" }}
 {{- end }}
 vault:
 {{- default .Values.global.bootstrapConfig.vault .Values.alerting.clusterWideNamespace.bootstrapConfig.vault | toYaml | nindent 2}}

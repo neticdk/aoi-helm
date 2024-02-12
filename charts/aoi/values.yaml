@@ -26,10 +26,11 @@ global:
   # .Values.alerting.clusterWideNamespace.bootstrapConfig
   bootstrapConfig:
     git:
-      # -- Which git flavor to use, currently only supports github and gitlab
+      # -- Which git flavor to use, currently only supports github, gitlab and bitbucket
       flavor: "github"
       github: {}
       gitlab: {}
+      bitbucket: {}
     vault: {}
     externalSecretsStore: {}
 
@@ -42,6 +43,7 @@ dashboards:
       # -- overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options.
       github: {}
       gitlab: {}
+      bitbucket: {}
     # -- overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options.
     vault: {}
     # -- overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options.
@@ -343,6 +345,7 @@ alerting:
         # -- overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options.
         github: {}
         gitlab: {}
+        bitbucket: {}
       # -- overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options.
       vault: {}
       # -- overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options.
