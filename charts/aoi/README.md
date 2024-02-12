@@ -103,6 +103,7 @@ A Helm chart for Netic application operations infrastructure
 | prometheus.configReloader.resources.limits.memory | string | `"25Mi"` |  |
 | prometheus.configReloader.resources.requests.cpu | string | `"10m"` |  |
 | prometheus.configReloader.resources.requests.memory | string | `"25Mi"` |  |
+| prometheus.externalLabels | object | `{}` | labels to add to all metrics. externalLabels:   cluster_id: "${cluster_provider}_${cluster_name}"   cluster: ${cluster_name}   cluster_type: "${cluster_type}"   prometheus_cluster: ${cluster_name}/aoi-prometheus   provider: "${cluster_provider}" |
 | prometheus.extraVolumeMounts | list | `[]` |  |
 | prometheus.extraVolumes | list | `[]` |  |
 | prometheus.image.registry | string | `"docker.io"` |  |
