@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -18,7 +18,10 @@ A Helm chart for Netic application operations infrastructure
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | alerting.clusterId | string | `""` | Value of the label (cluster_id) |
-| alerting.clusterWideNamespace.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{"secretRef":"tcs-github-auth","template":{"adminTeam":"oaas-team","owner":"neticdk-k8s","repo":"tenant-alerting-template"}}},"vault":{}}` | Options to configure the bootstrapConfig used for cluster-wide alert namespace. |
+| alerting.clusterWideNamespace.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
+| alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | object | `{}` | overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options. |
+| alerting.clusterWideNamespace.bootstrapConfig.git.github | object | `{}` | overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options. |
+| alerting.clusterWideNamespace.bootstrapConfig.vault | object | `{}` | overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | alerting.clusterWideNamespace.enabled | bool | `false` | Create alerting namespace for cluster-wide alert definitions |
 | alerting.clusterWideNamespace.name | string | `"application-operations-alerting"` |  |
 | alerting.clusterWideNamespace.projectBootstrap | object | `{"git":{}}` | Options to configure the projectBootstrap used for cluster-wide alert namespace. |
@@ -54,13 +57,18 @@ A Helm chart for Netic application operations infrastructure
 | authProxy.terminationGracePeriodSeconds | int | `30` |  |
 | authProxy.tolerations | list | `[]` |  |
 | authProxy.topologySpauthProxyConstraints | list | `[]` |  |
-| dashboards.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{"secretRef":"tcs-github-auth","template":{"adminTeam":"oaas-team","owner":"neticdk-k8s","repo":"tenant-grafana-template"}}},"vault":{}}` | Options to configure the bootstrapConfig used for tenant dashboard namespace |
+| dashboards.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
+| dashboards.bootstrapConfig.externalSecretsStore | object | `{}` | overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options. |
+| dashboards.bootstrapConfig.git.github | object | `{}` | overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options. |
+| dashboards.bootstrapConfig.vault | object | `{}` | overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | dashboards.projectBootstrap | object | `{"git":{}}` | Options to configure the projectBootstrap used for tenant dashboard namespace |
 | externalSecret.vaultDataFromKey | string | `nil` |  |
 | externalSecret.vaultMountPath | string | `nil` |  |
 | externalSecret.vaultPath | string | `nil` |  |
 | externalSecret.vaultServer | string | `nil` |  |
 | global.annotations | object | `{}` |  |
+| global.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"flavor":"github","github":{},"gitlab":{}},"vault":{}}` | Options to configure the bootstrapConfig used for all bootstrapConfig can be overwritten in specific bootstrapConfig |
+| global.bootstrapConfig.git.flavor | string | `"github"` | Which git flavor to use, currently only supports github and gitlab |
 | global.clusterDomain | string | `"cluster.local"` |  |
 | global.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | global.containerSecurityContext.capabilities.drop[0] | string | `"all"` |  |

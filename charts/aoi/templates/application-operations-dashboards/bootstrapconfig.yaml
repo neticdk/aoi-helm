@@ -32,11 +32,4 @@ spec:
 
   labels:
     netic.dk/enforce-policies: "true"
-  git:
-    {{- toYaml .Values.dashboards.bootstrapConfig.git | nindent 4 }}
-
-  vault:
-    {{- toYaml .Values.dashboards.bootstrapConfig.vault | nindent 4 }}
-
-  externalSecretsStore:
-    {{- toYaml .Values.dashboards.bootstrapConfig.externalSecretsStore | nindent 4 }}
+  {{- include "aoi.dashboards.bootstrapConfig" . | nindent 2 }}
