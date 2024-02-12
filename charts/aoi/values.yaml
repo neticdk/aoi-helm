@@ -21,7 +21,9 @@ global:
     capabilities:
       drop:
         - all
-  # -- Options to configure the bootstrapConfig used for all bootstrapConfig can be overwritten in specific bootstrapConfig
+  # -- Options to configure the bootstrapConfig globally can be overwritten for dashboards and clusterWideNamespace alerting namespace.
+  # .Values.dashboards.bootstrapConfig
+  # .Values.alerting.clusterWideNamespace.bootstrapConfig
   bootstrapConfig:
     git:
       # -- Which git flavor to use, currently only supports github and gitlab
