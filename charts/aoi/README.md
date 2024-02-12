@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -67,7 +67,7 @@ A Helm chart for Netic application operations infrastructure
 | externalSecret.vaultPath | string | `nil` |  |
 | externalSecret.vaultServer | string | `nil` |  |
 | global.annotations | object | `{}` |  |
-| global.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"flavor":"github","github":{},"gitlab":{}},"vault":{}}` | Options to configure the bootstrapConfig used for all bootstrapConfig can be overwritten in specific bootstrapConfig |
+| global.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"flavor":"github","github":{},"gitlab":{}},"vault":{}}` | Options to configure the bootstrapConfig globally can be overwritten for dashboards and clusterWideNamespace alerting namespace. .Values.dashboards.bootstrapConfig .Values.alerting.clusterWideNamespace.bootstrapConfig |
 | global.bootstrapConfig.git.flavor | string | `"github"` | Which git flavor to use, currently only supports github and gitlab |
 | global.clusterDomain | string | `"cluster.local"` |  |
 | global.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
