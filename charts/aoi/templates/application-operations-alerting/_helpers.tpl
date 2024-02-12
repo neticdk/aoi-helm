@@ -64,4 +64,22 @@ priorityClassName: {{ $pcn }}
 {{- end }}
 {{- end }}
 
-
+{{/*
+Create the git config for bootstrapConfig.
+*/}}
+{{- define "aoi.alerting.bootstrapConfig" -}}
+git:
+{{- if eq .Values.global.bootstrapConfig.git.flavor "github" }}  
+  github:
+  {{- default .Values.global.bootstrapConfig.git.github .Values.alerting.clusterWideNamespace.bootstrapConfig.git.github | toYaml | nindent 4}}
+{{- else if eq .Values.global.bootstrapConfig.git.flavor "gitlab" }}
+  gitlab:
+  {{- default .Values.global.bootstrapConfig.git.gitlab .Values.alerting.clusterWideNamespace.bootstrapConfig.git.gitlab | toYaml | nindent 4}}
+{{- else }}
+{{ fail "Invalid git flavor. Supported git flavors (github,gitlab)" }}
+{{- end }}
+vault:
+{{- default .Values.global.bootstrapConfig.vault .Values.alerting.clusterWideNamespace.bootstrapConfig.vault | toYaml | nindent 2}}
+externalSecretsStore:
+{{- default .Values.global.bootstrapConfig.externalSecretsStore .Values.alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | toYaml | nindent 2}}
+{{- end }}

@@ -21,19 +21,30 @@ global:
     capabilities:
       drop:
         - all
+  # -- Options to configure the bootstrapConfig globally can be overwritten for dashboards and clusterWideNamespace alerting namespace.
+  # .Values.dashboards.bootstrapConfig
+  # .Values.alerting.clusterWideNamespace.bootstrapConfig
+  bootstrapConfig:
+    git:
+      # -- Which git flavor to use, currently only supports github and gitlab
+      flavor: "github"
+      github: {}
+      gitlab: {}
+    vault: {}
+    externalSecretsStore: {}
+
 
 # Namespace for tenant dashboards
 dashboards:
-  # -- Options to configure the bootstrapConfig used for tenant dashboard namespace
+  # -- overwrite options configured in global.bootstrapConfig
   bootstrapConfig:
     git:
-      github:
-        secretRef: tcs-github-auth
-        template:
-          adminTeam: oaas-team
-          owner: neticdk-k8s
-          repo: tenant-grafana-template
+      # -- overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options.
+      github: {}
+      gitlab: {}
+    # -- overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options.
     vault: {}
+    # -- overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options.
     externalSecretsStore: {}
   # -- Options to configure the projectBootstrap used for tenant dashboard namespace
   projectBootstrap:
@@ -326,16 +337,15 @@ alerting:
     # -- Create alerting namespace for cluster-wide alert definitions
     enabled: false
     name: application-operations-alerting
-    # -- Options to configure the bootstrapConfig used for cluster-wide alert namespace.
+    # -- overwrite options configured in global.bootstrapConfig
     bootstrapConfig:
       git:
-        github:
-          secretRef: tcs-github-auth
-          template:
-            adminTeam: oaas-team
-            owner: neticdk-k8s
-            repo: tenant-alerting-template
+        # -- overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options.
+        github: {}
+        gitlab: {}
+      # -- overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options.
       vault: {}
+      # -- overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options.
       externalSecretsStore: {}
     # -- Options to configure the projectBootstrap used for cluster-wide alert namespace.
     projectBootstrap:

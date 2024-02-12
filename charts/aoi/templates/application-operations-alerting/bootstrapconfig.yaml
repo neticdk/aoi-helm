@@ -58,12 +58,5 @@ spec:
 
   labels:
     netic.dk/enforce-policies: "true"
-  git:
-    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.git | nindent 4 }}
-
-  vault:
-    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.vault | nindent 4 }}
-
-  externalSecretsStore:
-    {{- toYaml .Values.alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | nindent 4 }}
+  {{- include "aoi.alerting.bootstrapConfig" . | nindent 2 }}
 {{- end }}
