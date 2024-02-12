@@ -227,7 +227,7 @@ grafana:
     dashboards:
       enabled: true
       # -- Load configmaps with label key
-      label: aoi_dashboard
+      label: application-operations-dashboards
       # -- Watch for configmaps in namespaces
       searchNamespace:
         - application-operations-dashboards
