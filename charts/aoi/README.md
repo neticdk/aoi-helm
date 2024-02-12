@@ -18,7 +18,7 @@ A Helm chart for Netic application operations infrastructure
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | alerting.clusterId | string | `""` | Value of the label (cluster_id) |
-| alerting.clusterWideNamespace.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
+| alerting.clusterWideNamespace.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"bitbucket":{},"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
 | alerting.clusterWideNamespace.bootstrapConfig.externalSecretsStore | object | `{}` | overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | alerting.clusterWideNamespace.bootstrapConfig.git.github | object | `{}` | overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | alerting.clusterWideNamespace.bootstrapConfig.vault | object | `{}` | overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options. |
@@ -57,7 +57,7 @@ A Helm chart for Netic application operations infrastructure
 | authProxy.terminationGracePeriodSeconds | int | `30` |  |
 | authProxy.tolerations | list | `[]` |  |
 | authProxy.topologySpauthProxyConstraints | list | `[]` |  |
-| dashboards.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
+| dashboards.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"bitbucket":{},"github":{},"gitlab":{}},"vault":{}}` | overwrite options configured in global.bootstrapConfig |
 | dashboards.bootstrapConfig.externalSecretsStore | object | `{}` | overwrite externalSecretStore options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | dashboards.bootstrapConfig.git.github | object | `{}` | overwrite git options, make sure to include all options in overwrite, it is not merged with globally defined options. |
 | dashboards.bootstrapConfig.vault | object | `{}` | overwrite vault options, make sure to include all options in overwrite, it is not merged with globally defined options. |
@@ -67,8 +67,8 @@ A Helm chart for Netic application operations infrastructure
 | externalSecret.vaultPath | string | `nil` |  |
 | externalSecret.vaultServer | string | `nil` |  |
 | global.annotations | object | `{}` |  |
-| global.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"flavor":"github","github":{},"gitlab":{}},"vault":{}}` | Options to configure the bootstrapConfig globally can be overwritten for dashboards and clusterWideNamespace alerting namespace. .Values.dashboards.bootstrapConfig .Values.alerting.clusterWideNamespace.bootstrapConfig |
-| global.bootstrapConfig.git.flavor | string | `"github"` | Which git flavor to use, currently only supports github and gitlab |
+| global.bootstrapConfig | object | `{"externalSecretsStore":{},"git":{"bitbucket":{},"flavor":"github","github":{},"gitlab":{}},"vault":{}}` | Options to configure the bootstrapConfig globally can be overwritten for dashboards and clusterWideNamespace alerting namespace. .Values.dashboards.bootstrapConfig .Values.alerting.clusterWideNamespace.bootstrapConfig |
+| global.bootstrapConfig.git.flavor | string | `"github"` | Which git flavor to use, currently only supports github, gitlab and bitbucket |
 | global.clusterDomain | string | `"cluster.local"` |  |
 | global.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | global.containerSecurityContext.capabilities.drop[0] | string | `"all"` |  |
@@ -92,7 +92,7 @@ A Helm chart for Netic application operations infrastructure
 | grafana.resources.requests.memory | string | `"256Mi"` |  |
 | grafana.sidecar.dashboards.enabled | bool | `true` |  |
 | grafana.sidecar.dashboards.folderAnnotation | string | `"grafana_dashboard_folder"` | override grafana folder using annotation |
-| grafana.sidecar.dashboards.label | string | `"aoi_dashboard"` | Load configmaps with label key |
+| grafana.sidecar.dashboards.label | string | `"application-operations-dashboards"` | Load configmaps with label key |
 | grafana.sidecar.dashboards.provider.disableDelete | bool | `true` |  |
 | grafana.sidecar.dashboards.provider.foldersFromFilesStructure | bool | `true` |  |
 | grafana.sidecar.dashboards.searchNamespace | list | `["application-operations-dashboards"]` | Watch for configmaps in namespaces |
