@@ -22,12 +22,7 @@ spec:
       resources:
         {{- toYaml .Values.prometheus.configReloader.resources | nindent 8 }}
   evaluationInterval: 30s
-  externalLabels:
-    cluster_id: "${cluster_provider}_${cluster_name}"
-    cluster: ${cluster_name}
-    cluster_type: "${cluster_type}"
-    prometheus_cluster: ${cluster_name}/aoi-prometheus
-    provider: "${cluster_provider}"
+  externalLabels: {{ .Values.prometheus.externalLabels | toYaml | nindent 4 }}
   podMetadata:
     annotations:
       {{- toYaml .Values.prometheus.podAnnotations | nindent 6 }}
