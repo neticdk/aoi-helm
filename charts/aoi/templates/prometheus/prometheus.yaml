@@ -13,6 +13,7 @@ spec:
         - -httpListenAddr=:9090
         - -promscrape.config=/etc/prometheus/config_out/prometheus.env.yaml
         - -promscrape.config.strictParse=false
+        - -promscrape.maxScrapeSize=25165824 # 24 MiB # Default value 16777216
         - -remoteWrite.url={{- include "aoi.prometheusWriteUrl" . }}
         - -remoteWrite.urlRelabelConfig=/etc/prometheus/configmaps/remote-write-relabel/relabel_config.yaml
         - -remoteWrite.tmpDataPath=/prometheus
