@@ -296,7 +296,7 @@ victoria-metrics-single-2:
     retentionPeriod: 90d
     image:
       pullPolicy: Always
-    # Try to not schedule victoria-metrics-single-2 in same zone as victoria-metrics-single-1      
+    # Try to not schedule victoria-metrics-single-2 in same zone as victoria-metrics-single-1
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -382,7 +382,7 @@ alerting:
           image:
             registry: docker.io
             repository: kiwigrid/k8s-sidecar
-            tag: "1.25.2"
+            tag: "1.25.4"
             pullPolicy: Always
           resources:
             limits:
@@ -418,12 +418,30 @@ alerting:
           capabilities:
             drop:
               - ALL
+        configReloader:
+          image:
+            registry: ghcr.io
+            repository: neticdk/inotifywait-reloader
+            tag: "0.0.2"
+            pullPolicy: Always
+          resources:
+            limits:
+              memory: 96Mi
+            requests:
+              cpu: 10m
+              memory: 96Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
         podSecurityContext:
           runAsUser: 1000
           runAsGroup: 3000
           fsGroup: 2000
 
-# This is here to disable everything from the victoria-metrics-alert helm chart in chart.yaml since it is only used for versioning 
+# This is here to disable everything from the victoria-metrics-alert helm chart in chart.yaml since it is only used for versioning
 # Do not change!
 victoria-metrics-alert:
   serviceAccount:
