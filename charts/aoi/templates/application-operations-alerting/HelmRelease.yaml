@@ -95,7 +95,7 @@ spec:
             {{- toYaml $.Values.alerting.helmRelease.values.alertmanager.configReloader.securityContext | nindent 12 }}
           env:
             - name: WATCH_PATHS
-              value: /tmp/rules
+              value: /tmp/config
             - name: REQ_URL
               value: http://localhost:9093/-/reload
             - name: REQ_METHOD
