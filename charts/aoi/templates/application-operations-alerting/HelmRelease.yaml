@@ -100,6 +100,9 @@ spec:
               value: http://localhost:9093/-/reload
             - name: REQ_METHOD
               value: POST
+          volumeMounts:
+            - name: config
+              mountPath: /tmp/config
     serviceMonitor:
       enabled: true
       extraLabels:
