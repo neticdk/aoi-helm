@@ -422,7 +422,7 @@ alerting:
           image:
             registry: ghcr.io
             repository: neticdk/inotifywait-reloader
-            tag: "0.0.2"
+            tag: "v0.0.2"
             pullPolicy: Always
           resources:
             limits:
