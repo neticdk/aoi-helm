@@ -10,7 +10,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-        storage: {{ .Values.victoria-metrics.persistentVolume.size  }}
+        storage: {{ .Values.victoriaMetrics.persistentVolume.size  }}
   storageClassName: default
   volumeMode: Filesystem
 
@@ -20,14 +20,14 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: server-volume-aoi-victoria-metrics-single-2-server-0
+  name: server-volume-aoi-victoriaMetrics-single-2-server-0
   namespace: application-operations-system
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.victoria-metrics.persistentVolume.size }}
+      storage: {{ .Values.victoriaMetrics.persistentVolume.size }}
   storageClassName: default
   volumeMode: Filesystem
 
