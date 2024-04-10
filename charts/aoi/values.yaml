@@ -405,6 +405,7 @@ alerting:
         image:
           registry: docker.io
           repository: prom/alertmanager
+          tag: "v0.27.0"
           pullPolicy: Always
         resources:
           limits:
