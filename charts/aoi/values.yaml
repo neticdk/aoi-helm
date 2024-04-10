@@ -245,6 +245,10 @@ grafana:
     enabled: false
     fqdn: null
 
+victoria-metrics: 
+  persistentVolume:
+    # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
+    size: 5Gi
 
 victoria-metrics-single-1:
   rbac:
@@ -265,9 +269,6 @@ victoria-metrics-single-1:
                   values:
                     - victoria-metrics-single-2
             topologyKey: topology.kubernetes.io/zone
-    persistentVolume:
-      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
-      size: 100Gi
     resources:
       limits:
         memory: 1024Mi
@@ -307,9 +308,6 @@ victoria-metrics-single-2:
                   values:
                     - victoria-metrics-single-1
             topologyKey: topology.kubernetes.io/zone
-    persistentVolume:
-      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
-      size: 100Gi
     resources:
       limits:
         memory: 1024Mi
