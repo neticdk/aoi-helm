@@ -10,7 +10,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{- toYaml .Values.victoria-metrics.persistentVolume.size | nindent 6 }}
+        storage: {{ .Values.victoria-metrics.persistentVolume.size  }}
   storageClassName: default
   volumeMode: Filesystem
 
@@ -27,7 +27,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{- toYaml .Values.victoria-metrics.persistentVolume.size | nindent 6 }}
+      storage: {{ .Values.victoria-metrics.persistentVolume.size }}
   storageClassName: default
   volumeMode: Filesystem
 
