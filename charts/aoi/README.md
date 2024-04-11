@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -26,7 +26,7 @@ A Helm chart for Netic application operations infrastructure
 | alerting.clusterWideNamespace.name | string | `"application-operations-alerting"` |  |
 | alerting.clusterWideNamespace.projectBootstrap | object | `{"git":{}}` | Options to configure the projectBootstrap used for cluster-wide alert namespace. |
 | alerting.enabled | bool | `false` | Enable deploying alerting components |
-| alerting.helmRelease | object | `{"values":{"alertmanager":{"configReloader":{"image":{"pullPolicy":"Always","registry":"ghcr.io","repository":"neticdk/inotifywait-reloader","tag":"v0.0.2"},"resources":{"limits":{"memory":"96Mi"},"requests":{"cpu":"10m","memory":"96Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"image":{"pullPolicy":"Always","registry":"docker.io","repository":"prom/alertmanager"},"podSecurityContext":{"fsGroup":2000,"runAsGroup":3000,"runAsUser":1000},"priorityClassName":"secure-cloud-stack-tenant-namespace-application-critical","resources":{"limits":{"memory":"64Mi"},"requests":{"cpu":"10m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"server":{"configReloader":{"image":{"pullPolicy":"Always","registry":"docker.io","repository":"kiwigrid/k8s-sidecar","tag":"1.25.4"},"resources":{"limits":{"memory":"96Mi"},"requests":{"cpu":"10m","memory":"96Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"image":{"pullPolicy":"Always","registry":"docker.io","repository":"victoriametrics/vmalert"},"podSecurityContext":{"fsGroup":2000,"runAsGroup":3000,"runAsUser":1000},"priorityClassName":"secure-cloud-stack-tenant-namespace-application-critical","resources":{"limits":{"memory":"64Mi"},"requests":{"cpu":"10m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["all"]},"readOnlyRootFilesystem":true}}}}` | Values to configure for the victoria-metrics-alert helm chart. https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-alert/values.yaml |
+| alerting.helmRelease | object | `{"values":{"alertmanager":{"configReloader":{"image":{"pullPolicy":"Always","registry":"ghcr.io","repository":"neticdk/inotifywait-reloader","tag":"v0.0.2"},"resources":{"limits":{"memory":"96Mi"},"requests":{"cpu":"10m","memory":"96Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"image":{"pullPolicy":"Always","registry":"docker.io","repository":"prom/alertmanager","tag":"v0.27.0"},"podSecurityContext":{"fsGroup":2000,"runAsGroup":3000,"runAsUser":1000},"priorityClassName":"secure-cloud-stack-tenant-namespace-application-critical","resources":{"limits":{"memory":"64Mi"},"requests":{"cpu":"10m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"server":{"configReloader":{"image":{"pullPolicy":"Always","registry":"docker.io","repository":"kiwigrid/k8s-sidecar","tag":"1.25.4"},"resources":{"limits":{"memory":"96Mi"},"requests":{"cpu":"10m","memory":"96Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}},"image":{"pullPolicy":"Always","registry":"docker.io","repository":"victoriametrics/vmalert"},"podSecurityContext":{"fsGroup":2000,"runAsGroup":3000,"runAsUser":1000},"priorityClassName":"secure-cloud-stack-tenant-namespace-application-critical","resources":{"limits":{"memory":"64Mi"},"requests":{"cpu":"10m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["all"]},"readOnlyRootFilesystem":true}}}}` | Values to configure for the victoria-metrics-alert helm chart. https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-alert/values.yaml |
 | alerting.helmRepository | string | `nil` | Override the default helmRepository used to deploy alerting components |
 | alerting.namespaces | list | `[]` | List of namespaces which should have alerting components deployed |
 | authProxy.affinity | list | `[]` |  |
@@ -158,7 +158,6 @@ A Helm chart for Netic application operations infrastructure
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single-2"` |  |
 | victoria-metrics-single-1.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"topology.kubernetes.io/zone"` |  |
 | victoria-metrics-single-1.server.image.pullPolicy | string | `"Always"` |  |
-| victoria-metrics-single-1.server.persistentVolume.size | string | `"100Gi"` | Size of the volume. Should be calculated based on the metrics you send and retention policy you set. |
 | victoria-metrics-single-1.server.podSecurityContext.fsGroup | int | `2000` |  |
 | victoria-metrics-single-1.server.podSecurityContext.runAsGroup | int | `3000` |  |
 | victoria-metrics-single-1.server.podSecurityContext.runAsUser | int | `1000` |  |
@@ -176,7 +175,6 @@ A Helm chart for Netic application operations infrastructure
 | victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"victoria-metrics-single-1"` |  |
 | victoria-metrics-single-2.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"topology.kubernetes.io/zone"` |  |
 | victoria-metrics-single-2.server.image.pullPolicy | string | `"Always"` |  |
-| victoria-metrics-single-2.server.persistentVolume.size | string | `"100Gi"` | Size of the volume. Should be calculated based on the metrics you send and retention policy you set. |
 | victoria-metrics-single-2.server.podSecurityContext.fsGroup | int | `2000` |  |
 | victoria-metrics-single-2.server.podSecurityContext.runAsGroup | int | `3000` |  |
 | victoria-metrics-single-2.server.podSecurityContext.runAsUser | int | `1000` |  |
@@ -188,6 +186,7 @@ A Helm chart for Netic application operations infrastructure
 | victoria-metrics-single-2.server.securityContext.capabilities.drop[0] | string | `"all"` |  |
 | victoria-metrics-single-2.server.serviceMonitor.enabled | bool | `true` |  |
 | victoria-metrics-single-2.server.serviceMonitor.extraLabels."netic.dk/monitoring" | string | `"true"` |  |
+| victoriaMetrics.persistentVolume.size | string | `"5Gi"` | Size of the volume. Should be calculated based on the metrics you send and retention policy you set. |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.12.0](https://github.com/norwoodj/helm-docs/releases/v1.12.0)
+Autogenerated from chart metadata using [helm-docs v1.13.1](https://github.com/norwoodj/helm-docs/releases/v1.13.1)

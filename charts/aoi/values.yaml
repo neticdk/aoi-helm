@@ -95,7 +95,7 @@ prometheus:
   image:
     registry: docker.io
     repository: victoriametrics/vmagent
-    tag: v1.91.2
+    tag: v1.100.1@sha256:18959c254d474d150fd74534b8183e1a800d18d673a408b0c7d20e3febe6f4fe
   resources:
     limits:
       memory: 768Mi
@@ -143,7 +143,7 @@ promxy:
   image:
     registry: quay.io
     repository: jacksontj/promxy
-    tag: v0.0.84
+    tag: v0.0.85@sha256:115686ce1eb8e37696304b191ce33f13db1c0d7ec8f3ef36501f12bb74f83b9e
   priorityClassName: null
   annotations: {}
   podAnnotations: {}
@@ -245,6 +245,10 @@ grafana:
     enabled: false
     fqdn: null
 
+victoriaMetrics: 
+  persistentVolume:
+    # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
+    size: 5Gi
 
 victoria-metrics-single-1:
   rbac:
@@ -265,9 +269,6 @@ victoria-metrics-single-1:
                   values:
                     - victoria-metrics-single-2
             topologyKey: topology.kubernetes.io/zone
-    persistentVolume:
-      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
-      size: 100Gi
     resources:
       limits:
         memory: 1024Mi
@@ -307,9 +308,6 @@ victoria-metrics-single-2:
                   values:
                     - victoria-metrics-single-1
             topologyKey: topology.kubernetes.io/zone
-    persistentVolume:
-      # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
-      size: 100Gi
     resources:
       limits:
         memory: 1024Mi
@@ -382,7 +380,7 @@ alerting:
           image:
             registry: docker.io
             repository: kiwigrid/k8s-sidecar
-            tag: "1.25.4"
+            tag: "1.26.1@sha256:b8d5067137fec093cf48670dc3a1dbb38f9e734f3a6683015c2e89a45db5fd16"
             pullPolicy: Always
           resources:
             limits:
@@ -405,6 +403,7 @@ alerting:
         image:
           registry: docker.io
           repository: prom/alertmanager
+          tag: "v0.27.0"
           pullPolicy: Always
         resources:
           limits:

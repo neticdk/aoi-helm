@@ -35,5 +35,5 @@ priorityClassName: {{ $pcn }}
 authProxy upstreamUrl
 */}}
 {{- define "aoi.upstreamUrl" -}}
-{{- printf "http://%s.%s.svc.%s:%s" (include "aoi.readHost" . )   .Release.Namespace .Values.global.clusterDomain (include "aoi.readPort" . ) }}
+{{- printf "http://%s-%s.%s.svc.%s:%s" (include "aoi.name" . ) (include "aoi.readHost" . ) .Release.Namespace .Values.global.clusterDomain (include "aoi.readPort" . ) }}
 {{- end }}
