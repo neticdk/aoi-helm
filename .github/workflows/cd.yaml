@@ -7,6 +7,9 @@ on:
 
 jobs:
   publish_helm_chart:
+    permissions:
+      contents: write
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -14,37 +17,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      #
-      # Generated files
-      #
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.17.2'
-
-      - name: Install extra tooling
-        run: |
-          go install github.com/google/go-jsonnet/cmd/jsonnet@latest
-          go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
-          go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.12.0
-
-      # - name: Render documentation
-      #   run: |
-      #     export PATH=$PATH:$(go env GOPATH)/bin
-      #     helm-docs
-      #     git update-index  --ignore-submodules --refresh
-      #     git diff --exit-code
-      #     if ! git diff --exit-code ; then
-      #       echo Generating documentation caused a change - did you forget to run 'helm-docs' before commit?
-      #       exit 1
-      #     fi
       - name: Add repositories
         run: |
           for dir in $(ls -d charts/*/); do
             helm dependency list $dir 2> /dev/null | tail +2 | head -n -1 | awk '{ print "helm repo add " $1 " " $3 }' | while read cmd; do $cmd; done
           done
-      #
-      # Deploy
-      #
+
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -54,10 +32,6 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: v3.7.2
-
-      - name: Add dependency chart repos
-        run: ./.github/scripts/helm-repos.sh
-        shell: bash
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0

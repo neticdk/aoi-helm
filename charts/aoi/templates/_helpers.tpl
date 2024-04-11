@@ -68,7 +68,7 @@ Create the hostname for the read path to tsdb.
 {{- if .Values.global.tsdb.high_availability.enabled }}
 {{- printf "promxy" }}
 {{- else }}
-{{- printf "aoi-victoria-metrics-single-1-server" }}
+{{- printf "victoria-metrics-single-1-server" }}
 {{- end }}
 {{- end }}
 

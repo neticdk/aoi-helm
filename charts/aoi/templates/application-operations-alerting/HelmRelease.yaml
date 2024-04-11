@@ -78,6 +78,7 @@ spec:
       enabled: true
       {{- include "aoi.alertmanagerPriorityClassName" $ | nindent 6 }}
       image: "{{ $.Values.alerting.helmRelease.values.alertmanager.image.registry }}/{{ $.Values.alerting.helmRelease.values.alertmanager.image.repository }}"
+      tag: "{{ $.Values.alerting.helmRelease.values.alertmanager.image.tag }}"
       resources:
         {{- toYaml $.Values.alerting.helmRelease.values.alertmanager.resources | nindent 8 }}
       configMap: "alertmanager-config"
