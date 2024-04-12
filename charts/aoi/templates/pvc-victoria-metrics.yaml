@@ -11,7 +11,6 @@ spec:
   resources:
     requests:
         storage: {{ .Values.victoriaMetrics.persistentVolume.size  }}
-  storageClassName: default
   volumeMode: Filesystem
 
 {{- if .Values.global.tsdb.high_availability.enabled }}
