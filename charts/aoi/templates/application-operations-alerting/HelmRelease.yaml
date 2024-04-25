@@ -108,5 +108,6 @@ spec:
       enabled: true
       extraLabels:
         netic.dk/monitoring: "true"
+        netic.dk/allow-prometheus-scraping: "true"
 {{- end }}
 {{- end }}
