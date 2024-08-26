@@ -1,7 +1,7 @@
 {{- if .Values.alerting.enabled }}
 {{- range $i, $namespace := (include "aoi.alerting.namespaces" . | fromJsonArray) }}
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: victoria-metrics-alert
@@ -106,6 +106,17 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /tmp/config
+      {{- if $.Values.alerting.helmRelease.values.alertmanager.emailPasswordMount }}
+      extraVolumeMounts:
+        - name: email-password
+          readOnly: true
+          mountPath: /etc/email-password
+      extraVolumes:
+        - name: email-password
+          secret:
+            optional: true
+            secretName: aoi-alertmanager-email-password
+      {{- end }}
     serviceMonitor:
       enabled: true
       extraLabels:
