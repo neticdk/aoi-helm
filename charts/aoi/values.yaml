@@ -399,6 +399,7 @@ alerting:
           runAsGroup: 3000
           fsGroup: 2000
       alertmanager:
+        emailPasswordMount: false
         priorityClassName: "secure-cloud-stack-tenant-namespace-application-critical"
         image:
           registry: docker.io
