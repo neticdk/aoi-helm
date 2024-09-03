@@ -2,6 +2,7 @@
 global:
   clusterDomain: "cluster.local"
   tsdb:
+    enabled: true
     high_availability:
       # -- Enable high-availability for tsdb (Victoria-metrics-single)
       enabled: false
@@ -245,7 +246,7 @@ grafana:
     enabled: false
     fqdn: null
 
-victoriaMetrics: 
+victoriaMetrics:
   persistentVolume:
     # -- Size of the volume. Should be calculated based on the metrics you send and retention policy you set.
     size: 5Gi
