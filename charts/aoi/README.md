@@ -1,6 +1,6 @@
 # aoi
 
-![Version: 0.1.18](https://img.shields.io/badge/Version-0.1.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.19-rc2](https://img.shields.io/badge/Version-0.1.19--rc2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for Netic application operations infrastructure
 
@@ -81,6 +81,7 @@ A Helm chart for Netic application operations infrastructure
 | global.revisionHistoryLimit | int | `5` |  |
 | global.serviceAnnotations | object | `{}` |  |
 | global.serviceLabels | object | `{}` |  |
+| global.tsdb.enabled | bool | `true` |  |
 | global.tsdb.high_availability.enabled | bool | `false` | Enable high-availability for tsdb (Victoria-metrics-single) |
 | grafana.enabled | bool | `true` | If true deploy Grafana for tenant dashboards |
 | grafana.image.pullPolicy | string | `"Always"` |  |
